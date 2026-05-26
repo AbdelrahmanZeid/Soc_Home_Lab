@@ -12,7 +12,7 @@ The lab environment is contained within a private virtual network, consisting of
 
 * **Attacker Machine:** Kali Linux (`192.168.1.13`)
 * **Target Victim:** Windows 10 Endpoint (`192.168.1.14`)
-* **SIEM & Logging Server:** Ubuntu Server hosting Splunk Enterprise
+* **SIEM & Logging Server:** Ubuntu Server hosting Splunk Enterprise (`192.168.1.50`)
 * **Log Forwarding:** Splunk Universal Forwarder paired with Sysmon for comprehensive endpoint visibility.
 
 ![Lab Architecture Topology](images/lab_topology.png)
