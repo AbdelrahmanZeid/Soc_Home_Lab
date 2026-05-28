@@ -97,7 +97,7 @@ Tracks persistent internal infrastructure interactions and execution parameters 
 > `index=* "wise_mini" EventCode=1`
 > `| table _time, ParentImage, Image, CommandLine`
 
-![Splunk Panel Interface](images/splunk_detection.png)
+![Splunk Panel Interface](images/detect_persistence.PNG)
 *Alternative Text: Splunk dashboard panels displaying query hits for persistence and abnormal process creation.*
 
 ---
