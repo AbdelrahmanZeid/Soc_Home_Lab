@@ -154,7 +154,7 @@ Identifies the network traffic on target C2 ports or isolates cryptographic nego
 *Cryptographic Profiling Layer:*
 > `tls.handshake.type == 1 || tls.handshake.type == 11`
 
-![Wireshark Traffic Capture](images/detect_cnc_using_wireshark.PNG)
+![Wireshark Traffic Capture](images/detect_cnc_using wireshark.PNG)
 *Alternative Text: Wireshark packet capture showing TCP flag distributions and TLS handshake parameters.*
 
 ---
