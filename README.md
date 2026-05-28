@@ -27,7 +27,7 @@ Using native testing mechanisms and specialized frameworks, the following offens
 Identified open ports, active services, and operating system versions on the victim machine.
 > `nmap -sS -T4 -Pn --top-ports 4000 -sV 192.168.1.14`
 
-![Nmap Scan Results](images/1_recon_nmap.PNG)
+![Nmap Scan Results](images/scanning.PNG)
 *Alternative Text: Terminal output showing discovered open ports and services on the target Windows 10 machine.*
 
 ### 2. Weaponization (Payload Generation)
@@ -57,7 +57,7 @@ Hosted the payload using a Python-based web server and initiated a Metasploit mu
 Established a boot-persistent mechanism by forcing the payload to run automatically upon user authentication via the Windows Registry.
 > `reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "weapon.exe" /t REG_SZ /d "C:\Users\zeid4\OneDrive\Desktop\weapon.exe" /f`
 
-![Registry Persistence Setup](images/4_persistence_registry.PNG)
+![Registry Persistence Setup](images/persistence.PNG)
 *Alternative Text: Command prompt showing the successful addition of the run key to the Windows Registry.*
 
 ### 5. Command & Control (C2) & Exfiltration
