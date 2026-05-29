@@ -84,7 +84,7 @@ Aggregates network connection events (`EventCode=3`) originating from the suspic
 > `| stats count by dest_port` 
 > `| where count > 10`
 
-![Splunk Port Scan Detection](images/splunk_scanning_detection.PNG)
+![Splunk Port Scan Detection](images/splunk_snanning_detection.PNG)
 *Alternative Text: Splunk dashboard showing a spike in network connections to various destination ports from the attacker IP.*
 
 #### B. Delivery & Execution Connection Tracking
