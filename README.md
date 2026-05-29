@@ -67,7 +67,7 @@ Generated an advanced C2 implant (`WISE_MINI.exe`) utilizing mutual TLS (`mTLS`)
 > `# Exfiltrating target files`
 > `download passwords.txt`
 
-![C2 Session and Exfiltration](images/5_c2_exfiltration.PNG)
+![C2 Session and Exfiltration](images/CnC.PNG)
 *Alternative Text: Terminal view of the active C2 session and successful file download of passwords.txt.*
 
 ---
@@ -84,7 +84,7 @@ Aggregates network connection events (`EventCode=3`) originating from the suspic
 > `| stats count by dest_port` 
 > `| where count > 10`
 
-![Splunk Port Scan Detection](images/splunk_A_port_scan.PNG)
+![Splunk Port Scan Detection](images/splunk_scanning_detection.PNG)
 *Alternative Text: Splunk dashboard showing a spike in network connections to various destination ports from the attacker IP.*
 
 #### B. Delivery & Execution Connection Tracking
@@ -92,7 +92,7 @@ Isolates active connections running over common target reverse ports or suspicio
 > `index=* dest_port=4444`
 > `| table _time, src_ip, dest_ip, dest_port`
 
-![Splunk Connection Tracking](images/splunk_B_delivery_connection.PNG)
+![Splunk Connection Tracking](images/splunk_connenction_tracking.PNG)
 *Alternative Text: Splunk logs detailing the active network connection on port 4444 between the victim and attacker machine.*
 
 #### C. Anomalous Process Lineage (Shell Spawning)
@@ -101,7 +101,7 @@ Detects command shells (`cmd.exe`, `powershell.exe`) spawned by unusual parent p
 > `| where NOT (ParentImage LIKE "*explorer.exe" OR ParentImage LIKE "*services.exe")` 
 > `| table _time, user, Image, ParentImage`
 
-![Splunk Anomalous Process Lineage](images/splunk_C_process_lineage.PNG)
+![Splunk Anomalous Process Lineage](images/Anomalos.PNG)
 *Alternative Text: Splunk query results displaying weapon.exe as the suspicious parent process spawning cmd.exe.*
 
 #### D. Registry Persistence Monitoring
@@ -121,7 +121,7 @@ Tracks persistent internal infrastructure interactions and execution parameters 
 > `index=* "wise_mini" EventCode=1`
 > `| table _time, ParentImage, Image, CommandLine`
 
-![Splunk C2 Beaconing Fingerprint](images/splunk_E_c2_beaconing.PNG)
+![Splunk C2 Beaconing Fingerprint](images/splunk_beaconing_fingerprint.PNG)
 *Alternative Text: Splunk logs highlighting WISE_MINI.exe execution and its outbound beaconing activity.*
 
 ---
@@ -144,7 +144,7 @@ Isolates packets where the SYN flag is set but no ACK response follows, exposing
 Extracts raw HTTP web transactions happening between the target computer and the attack system, indicating explicit utility downloads or artifact transfers.
 > `http && (ip.src == 192.168.1.14 && ip.dst == 192.168.1.13)`
 
-![Wireshark HTTP Delivery](images/wireshark_B_http_delivery.PNG)
+![Wireshark HTTP Delivery](images/wireshark.PNG)
 *Alternative Text: Wireshark view showing the HTTP GET request from the Windows machine downloading the payload.*
 
 #### C. Command and Control Handshake Extraction
