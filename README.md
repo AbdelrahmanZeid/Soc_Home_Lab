@@ -137,7 +137,7 @@ Isolates packets where the SYN flag is set but no ACK response follows, exposing
 *Target-focused view:*
 > `tcp.flags.syn == 1 && tcp.flags.ack == 0 and ip.dst == 192.168.1.14`
 
-![Wireshark SYN Scan Capture](images/wireshark_A_syn_scan.PNG)
+
 *Alternative Text: Wireshark packet capture highlighting a rapid succession of SYN packets directed at the target.*
 
 #### B. HTTP Payload Delivery Tracing
@@ -154,7 +154,7 @@ Identifies the network traffic on target C2 ports or isolates cryptographic nego
 *Cryptographic Profiling Layer:*
 > `tls.handshake.type == 1 || tls.handshake.type == 11`
 
-![Wireshark Traffic Capture](images/detect_cnc_using wireshark.PNG)
+
 *Alternative Text: Wireshark packet capture showing TCP flag distributions and TLS handshake parameters.*
 
 ---
