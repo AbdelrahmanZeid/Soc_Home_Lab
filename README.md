@@ -144,7 +144,7 @@ Isolates packets where the SYN flag is set but no ACK response follows, exposing
 Extracts raw HTTP web transactions happening between the target computer and the attack system, indicating explicit utility downloads or artifact transfers.
 > `http && (ip.src == 192.168.1.14 && ip.dst == 192.168.1.13)`
 
-![Wireshark HTTP Delivery](images/wireshark.PNG)
+![Wireshark HTTP Delivery](images/wireshark http delivery.PNG)
 *Alternative Text: Wireshark view showing the HTTP GET request from the Windows machine downloading the payload.*
 
 #### C. Command and Control Handshake Extraction
