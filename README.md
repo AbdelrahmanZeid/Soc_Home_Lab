@@ -92,7 +92,7 @@ Isolates active connections running over common target reverse ports or suspicio
 > `index=* dest_port=4444`
 > `| table _time, src_ip, dest_ip, dest_port`
 
-![Splunk Connection Tracking](images/splunk_connenction_tracking.PNG)
+![Splunk Connection Tracking](images/splunk_connection_tracking.PNG)
 *Alternative Text: Splunk logs detailing the active network connection on port 4444 between the victim and attacker machine.*
 
 #### C. Anomalous Process Lineage (Shell Spawning)
